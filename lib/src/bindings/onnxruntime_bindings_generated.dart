@@ -2038,10 +2038,24 @@ class OrtApi extends ffi.Struct {
                   ffi.Pointer<ffi.Char> affinity_string)>>
       SetGlobalIntraOpThreadAffinity;
 
-  external ffi.Pointer<
-      ffi.NativeFunction<
-          OrtStatusPtr Function(ffi.Pointer<OrtSessionOptions> options,
-              ffi.Pointer<ffi.Char> library_name)>> RegisterCustomOpsLibrary_V2;
+  /// \brief Register custom ops from a shared library.
+  ///
+  /// Loads a shared library (.dll on windows, .so on linux, etc) named 'library_name' and looks for this entry point:
+  /// OrtStatus* RegisterCustomOps(OrtSessionOptions * options, const OrtApiBase* api);
+  /// It then passes in the provided session options to this function along with the api base.
+  ///
+  /// The handle to the loaded library is automatically released by ORT when the last OrtSession that references the
+  /// library handle is released. If no OrtSession is created, then the library handle is released when the provided
+  /// OrtSessionOptions is released.
+  ///
+  /// \param[in] options The session options.
+  /// \param[in] library_name The name of the shared library to load and register. Refer to OS-specific dynamic library
+  /// loading utilities (e.g., LoadLibraryEx on Windows or dlopen on Linux/MacOS) for information
+  /// on the format of library names and search paths.
+  ///
+  /// \snippet{doc} snippets.dox OrtStatus Return Value
+  /// \since Version 1.14
+  external ffi.Pointer<ffi.NativeFunction<OrtStatusPtr Function(ffi.Pointer<OrtSessionOptions> options, ffi.Pointer<ffi.Char> library_name)>> RegisterCustomOpsLibrary_V2;
 
   external ffi.Pointer<
           ffi.NativeFunction<

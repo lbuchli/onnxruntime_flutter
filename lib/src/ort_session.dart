@@ -402,8 +402,15 @@ class OrtSessionOptions {
 
   /// Appends Xnnpack provider.
   bool appendXnnpackProvider() {
-    return _appendExecutionProvider2(OrtProvider.xnnpack,
-        {'intra_op_num_threads': _intraOpNumThreads.toString()});
+    return _appendExecutionProvider2(OrtProvider.xnnpack, {'intra_op_num_threads': _intraOpNumThreads.toString()});
+  }
+
+  /// Register onnxruntime extensions
+  void registerCustomOpsLibrary() {
+    final providerNamePtr = onnxRuntimeExtensionsLibName.toNativeUtf8().cast<ffi.Char>();
+    bg.OrtStatusPtr? statusPtr = OrtEnv.instance.ortApiPtr.ref.RegisterCustomOpsLibrary_V2.asFunction<bg.OrtStatusPtr Function(ffi.Pointer<bg.OrtSessionOptions>, ffi.Pointer<ffi.Char>)>()(_ptr, providerNamePtr);
+    OrtStatus.checkOrtStatus(statusPtr);
+    calloc.free(providerNamePtr);
   }
 }
 

@@ -28,3 +28,23 @@ final DynamicLibrary _dylib = () {
 
 /// OnnxRuntime Bindings
 final onnxRuntimeBinding = OnnxRuntimeBindings(_dylib);
+
+String onnxRuntimeExtensionsLibName = () {
+  if (Platform.isAndroid || Platform.isLinux) {
+    return "libortextensions.so";
+  }
+
+  if (Platform.isMacOS) {
+    return "libortextensions.dylib";
+  }
+
+  if (Platform.isWindows) {
+    return "libortextensions.dll";
+  }
+
+  if (Platform.isIOS) {
+    return "onnxruntime_extensions.framework/onnxruntime_extensions";
+  }
+
+  throw UnsupportedError('Unknown platform: ${Platform.operatingSystem}');
+}();
