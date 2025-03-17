@@ -20,7 +20,7 @@ final DynamicLibrary _dylib = () {
   }
 
   if (Platform.isLinux) {
-    return DynamicLibrary.open('libonnxruntime.so.1.15.1');
+    return DynamicLibrary.open('libonnxruntime.so.1.20.2');
   }
 
   throw UnsupportedError('Unknown platform: ${Platform.operatingSystem}');
